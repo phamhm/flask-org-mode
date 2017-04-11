@@ -15,13 +15,18 @@ Bootstrap(app)
 
 
 class User(UserMixin, mongo.Document):
-    id = mongo.IntField(unique=True, primary_key=True)
-    username = mongo.StringField(max_length=30, required=True)
-    password = mongo.StringField(max_length=30, required=True)
+    id = mongo.IntField(unique=True,
+                        primary_key=True)
+    username = mongo.StringField(unique=True,
+                                 max_length=30,
+                                 required=True)
+    password = mongo.StringField(max_length=30,
+                                 required=True)
 
 
 @login_manager.user_loader
 def load_user(user_id):
+    # how do i get rid of this function?
     return User.objects(id=user_id).first()
 
 
@@ -50,7 +55,7 @@ def login():
 @login_required
 def logout():
     logout_user()
-    return 'you are now logged out'
+    return redirect(url_for('login'))
 
 
 @app.route('/home')
